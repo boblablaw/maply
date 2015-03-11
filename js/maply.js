@@ -8,17 +8,33 @@ var start_options = {
 
 var map = new google.maps.Map($('#map')[0], start_options);
 
+new google.maps.Marker({
+	position: start_options.center,
+	map: map,
+	title: "Eleven Fifty Coding Academy"
+});
+
 $('form#geocoder').submit(function(ev){
 	ev.preventDefault();
 	var address = $(this.address).val();
-	$.get(url + address).done(function(data){
-		var location = data.results[0].geometry.location;
 	
-		var mapOptions = {
+	$.get(url + address).done(function(data){
+		var location, map_options, marker;
+
+		location = data.results[0].geometry.location;
+	
+		map_options = {
       center: { lat: location.lat, lng: location.lng},
       zoom: 15,
       mapTypeId: google.maps.MapTypeId.HYBRID
     };
-    var map = new google.maps.Map($('#map')[0], mapOptions);
+
+    map.setOptions(map_options);
+   
+    marker = new google.maps.Marker({
+    	position: map_options.center,
+    	map: map,
+    	title: address
+    });
 	})
 });
